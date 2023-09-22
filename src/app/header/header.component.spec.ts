@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { HeaderComponent } from './header.component';
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    declarations: [AppComponent]
+    declarations: [HeaderComponent]
   }));
 });
