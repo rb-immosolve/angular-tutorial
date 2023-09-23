@@ -1,0 +1,30 @@
+<hr />
+<div class="container">
+    <div class="row">
+        <h3>Assignment 2 - Databinding</h3>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <p style="display: inline;">Row Text : </p>
+        <input type="text" 
+            class="form-control inline-form-control" 
+            [placeholder]="defaultRowNameText" 
+            [(ngModel)]="currentRowName" 
+            (input)="calculateButtonDisable()"
+            />
+        <button class="btn btn-primary" [disabled]="addNewRowButtonDisabled" (click)="addNewRow()"> 
+            {{ allowButtonText }} 
+        </button>
+    </div>
+    <div class="row">Row counter is : {{rowCounter}}</div>
+    <div class="row">Current row name is : {{currentRowName}}</div>
+</div>
+<div class="container">
+    <div class="row">Rows added are : </div>
+    <div class="row">
+        <ul>
+            <li *ngFor="let row of rows">{{row}}</li>
+        </ul>
+    </div>
+</div>
