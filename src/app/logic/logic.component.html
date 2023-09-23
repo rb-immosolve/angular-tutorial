@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <button (click)="condition=!condition" class="btn btn-primary">Toggle Condition</button>
+        <p *ngIf="condition" class="inline">Conditional Text</p>
+    </div>
+    <div class="row">
+        <button class="btn" [ngStyle]="colorCondition?{color:'green'}:{color:'red'}" (click)="toggleColor()">
+            Toggle Color
+        </button>
+    </div>
+    <div class="row">
+        <button class="btn" [ngClass]="colorCondition?'btn-success':'btn-danger'" (click)="toggleColor()">
+            Toggle Color
+        </button>
+    </div>
+</div>
+<hr>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            Server Name:
+            <input type="text" class="form-control" [(ngModel)]="server" />
+            <button class="btn btn-primary" (click)="addServer()" [disabled]="server===''">Add Server</button>
+        </div>
+    </div>
+    <div class="row">
+        <ul>
+            <li *ngFor="let server of servers" ngStyle=""> {{server}} </li>
+        </ul>
+    </div>
+</div>

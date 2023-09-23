@@ -1,0 +1,27 @@
+<hr>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Assignment 3 - Directives (if, for)</h3>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-secondary" (click)="toggleAndLog()">Display details</button>
+            <p *ngIf="paragraphDisplay">Here are some cool details about fish : https://en.wikipedia.org/wiki/Fish </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            Action Logs:
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div *ngFor="let log of logs; index as i" [ngStyle]="i>4?{backgroundColor:'blue'}:{}"
+                [ngClass]="{whiteText: i>4}"> {{ log }}</div>
+        </div>
+    </div>
+</div>

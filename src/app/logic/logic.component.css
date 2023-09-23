@@ -1,0 +1,9 @@
+.inline{
+    display: inline;
+    margin: 5px;
+}
+
+.row{
+    margin-top:5px;
+    margin-bottom: 5px;
+}
