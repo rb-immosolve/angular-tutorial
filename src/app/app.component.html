@@ -1,0 +1,14 @@
+<app-game-control (eventFired)="events.push($event)"></app-game-control>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">Events</div>
+        <div class="panel-body">
+            <div class="row" *ngFor="let event of events">
+                <div class="col-xs-12">
+                    <app-even [value]="event" *ngIf="event%2===0"></app-even>
+                    <app-odd [value]="event" *ngIf="event%2===1"></app-odd>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
