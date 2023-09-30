@@ -1,1 +1,36 @@
-<p>color-options works!</p>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12" style="font-weight:bold">
+                Click a button to pick a color:
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 color-buttons">
+                <button class="btn btn-primary" (click)="changeColor('#286090')">Blue</button>
+                <button class="btn btn-success" (click)="changeColor('#449d44')">Green</button>
+                <button class="btn btn-danger" (click)="changeColor('#c9302c')">Red</button>
+                <button class="btn btn-warning" (click)="changeColor('#ec971f')">Orange</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12" style="font-weight:bold">
+                Or, enter red, green and blue values:
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <input type="text" class="form-control" placeholder="Red" #redValue>
+                <input type="text" class="form-control" placeholder="Green" #greenValue>
+                <input type="text" class="form-control" placeholder="Blue" #blueValue>
+                <button class="btn btn-secondary" (click)="setAndChangeColor(redValue.value, greenValue.value, blueValue.value);">Set Color</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="margin-top:5px;" *ngIf="errorList.length > 0">
+                <div class="alert alert-danger">{{ errorList }}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./color-picker.component.scss']
 })
 export class ColorPickerComponent {
-
+  color:string = "#000000";
 }
