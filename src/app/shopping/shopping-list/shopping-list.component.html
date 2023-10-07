@@ -1,10 +1,21 @@
 <div class="row">
     <div class="col-xs-12">
-        <app-shopping-list-edit></app-shopping-list-edit>
-        <hr>
-        <ul class="list-group">
-            <a style="cursor: pointer;" class="list-group-item" *ngFor="let ingredient of ingredients"> {{
-                ingredient.name }} : {{ingredient.amount}}</a>
-        </ul>
+        <app-shopping-list-edit (addIngredient)="addIngredient($event)" (removeIngredient)="removeIngredient($event)"></app-shopping-list-edit>
     </div>
 </div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="error" *ngIf="errMsg.length > 0">{{errMsg}}</div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="list-group">
+            <a style="cursor: pointer;" class="list-group-item" *ngFor="let ingredient of ingredients"> 
+                {{ingredient.amount}} {{ingredient.unit}} - {{ingredient.name}}
+            </a>
+        </ul>        
+    </div>
+</div>
+
