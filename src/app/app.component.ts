@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+  toggle:boolean = false
+  rainbowClass:string = ""
+  
+  makeItCooler():void {
+    this.rainbowClass = (this.rainbowClass=="")?"rainbow":""
+  }
 }
