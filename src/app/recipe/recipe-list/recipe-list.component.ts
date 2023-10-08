@@ -10,8 +10,8 @@ export class RecipeListComponent implements OnInit{
   @Output('recipeClick') recipeClick = new EventEmitter<Recipe>()
 
   recipes:Recipe[] = [
-    new Recipe('A Test Recipe', 'This is simply a test', 'https://i0.wp.com/pixahive.com/wp-content/uploads/2020/09/Dragon-Ball-Zee-Paper-Art-104268-pixahive.jpg'),
-    new Recipe('Recipe2', 'This is simply a test', 'https://i0.wp.com/pixahive.com/wp-content/uploads/2020/09/Dragon-Ball-Zee-Paper-Art-104268-pixahive.jpg'),
+    new Recipe('A Test Recipe', 'This is simply a test', 'https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com//content/f1/40/d07fd28b4f23954ed7ea4bcdd2af/card-overlay._TTW_._CR0,0,1080,648_.jpg'),
+    new Recipe('Recipe2', 'This is simply a test', 'https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com//content/f1/40/d07fd28b4f23954ed7ea4bcdd2af/card-overlay._TTW_._CR0,0,1080,648_.jpg'),
   ];
 
   onRecipeClick(recipe:Recipe){
@@ -19,7 +19,8 @@ export class RecipeListComponent implements OnInit{
   }
 
   ngOnInit(){
-    console.log('firstClick')
-    this.recipeClick.emit(this.recipes[0])
+    if(this.recipes.length > 0){
+      this.recipeClick.emit(this.recipes[0])  
+    }
   }
 }
