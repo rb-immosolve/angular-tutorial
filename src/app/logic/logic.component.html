@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <button (click)="condition=!condition" class="btn btn-primary">Toggle Condition</button>
-        <p *ngIf="condition" class="inline">Conditional Text</p>
+        <p *appUnless="!condition" [log]="'hi'" class="inline">Conditional Text</p>
     </div>
     <div class="row">
         <button class="btn" [ngStyle]="colorCondition?{color:'green'}:{color:'red'}" (click)="toggleColor()">
@@ -32,7 +32,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <p appHighlighter> I am highlighted via directive, innit cool bruv?</p>
+            <p [appHighlighter]="'violet'"> I am highlighted via directive, innit cool bruv?</p>
         </div>
     </div>
 </div>

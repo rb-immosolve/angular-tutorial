@@ -6,13 +6,15 @@ import { FormsModule } from '@angular/forms';
 import { LogicComponent } from './logic/logic.component';
 import { Assignment3Component } from './assignment3/assignment3.component';
 import { HighlighterDirective } from './lib/directives/highlighter.directive';
+import { UnlessDirective } from './lib/directives/unless.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     LogicComponent,
     Assignment3Component,
-    HighlighterDirective
+    HighlighterDirective,
+    UnlessDirective
   ],
   imports: [
     BrowserModule,
