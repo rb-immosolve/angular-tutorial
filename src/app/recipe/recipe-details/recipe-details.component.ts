@@ -1,4 +1,5 @@
-import { Component, DoCheck, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { RecipeService } from 'src/app/lib/services/recipe.service';
 import { Recipe } from 'src/app/model/recipe.model';
 
 @Component({
@@ -6,7 +7,13 @@ import { Recipe } from 'src/app/model/recipe.model';
   templateUrl: './recipe-details.component.html',
   styleUrls: ['./recipe-details.component.css']
 })
-export class RecipeDetailsComponent{
-  @Input('recipeItem') recipe:Recipe
+export class RecipeDetailsComponent implements OnInit {
+  recipe: Recipe
 
+  constructor(private recipeService: RecipeService) { }
+
+  ngOnInit(): void {
+    this.recipe = this.recipeService.recipeList[0]
+    this.recipeService.changeActiveRecipe.subscribe((recipe: Recipe) => this.recipe = recipe);
+  }
 }

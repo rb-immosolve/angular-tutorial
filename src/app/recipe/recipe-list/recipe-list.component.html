@@ -4,10 +4,6 @@
     </div>
 </div>
 <hr>
-<app-recipe-item 
-    *ngFor="let recipe of recipes" 
-    [recipe]="recipe"
-    (recipeClick)="onRecipeClick($event)"
-    >
+<app-recipe-item *ngFor="let recipe of recipeService.recipeList" [recipe]="recipe">
 </app-recipe-item>
 

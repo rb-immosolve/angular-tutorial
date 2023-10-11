@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { RecipeService } from 'src/app/lib/services/recipe.service';
 import { Recipe } from 'src/app/model/recipe.model';
 
 @Component({
@@ -7,11 +8,11 @@ import { Recipe } from 'src/app/model/recipe.model';
   styleUrls: ['./recipe-item.component.css']
 })
 export class RecipeItemComponent {
-  @Input('recipe') recipe:Recipe
-  @Output('recipeClick') recipeClick = new EventEmitter<Recipe>()
+  @Input('recipe') recipe: Recipe
 
-  showRecipeDetails(){
-    this.recipeClick.emit(this.recipe)
+  constructor(public recipeService: RecipeService) { }
+
+  recipeClick() {
+    this.recipeService.changeActiveRecipe.emit(this.recipe)
   }
-
 }
