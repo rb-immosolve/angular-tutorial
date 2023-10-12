@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { Recipe } from "src/app/model/recipe.model";
+import { bootstrapRecipes } from "../fixtures/recipes";
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
@@ -7,12 +8,15 @@ export class RecipeService {
     changeActiveRecipe = new EventEmitter<Recipe>()
 
     constructor() {
-        this.addRecipe(new Recipe('A Test Recipe', 'This is simply a test', 'https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com//content/f1/40/d07fd28b4f23954ed7ea4bcdd2af/card-overlay._TTW_._CR0,0,1080,648_.jpg'));
-        this.addRecipe(new Recipe('Recipe2', 'This is simply a test', 'https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com//content/f1/40/d07fd28b4f23954ed7ea4bcdd2af/card-overlay._TTW_._CR0,0,1080,648_.jpg'));
+        this.addRecipes(bootstrapRecipes);
     }
 
     addRecipe(recipe: Recipe): void {
         this.recipeList.push(recipe);
+    }
+
+    addRecipes(recipes: Recipe[]): void {
+        recipes.map((item) => this.addRecipe(item));
     }
 
     removeRecipeByName(recipeName: string): void {
