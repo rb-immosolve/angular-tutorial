@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { Recipe } from '../../model/recipe.model';
+import { Recipe } from '../../../model/recipe.model';
 import { RecipeService } from 'src/app/lib/services/recipe.service';
 import { Logger } from 'src/app/lib/services/logging.service';
 

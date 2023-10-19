@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, DoCheck, OnInit } from '@angular/core';
-import { Recipe } from '../model/recipe.model';
-import { RecipeService } from '../lib/services/recipe.service';
+import { Recipe } from '../../model/recipe.model';
+import { RecipeService } from '../../lib/services/recipe.service';
 
 @Component({
   selector: 'app-recipe',

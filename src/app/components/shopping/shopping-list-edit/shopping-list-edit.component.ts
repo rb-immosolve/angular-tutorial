@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { UNITS, Unit, Ingredient } from '../../model/ingredient.model';
+import { UNITS, Unit, Ingredient } from '../../../model/ingredient.model';
 import { Logger } from 'src/app/lib/services/logging.service';
 
 @Component({
