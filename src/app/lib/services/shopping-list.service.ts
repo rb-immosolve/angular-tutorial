@@ -20,13 +20,15 @@ export class ShoppingListService {
             }
         }
         if (!existingIngredientIncremented) {
-            this.shoppingList.push(ingredient)
+            this.shoppingList.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unit))
         }
         return ""
     }
 
     addRecipeToShoppingList(recipe: Recipe) {
-        recipe.ingredients.map((item) => this.addIngredientToShoppingList(item))
+        for (let i of recipe.ingredients) {
+            this.addIngredientToShoppingList(i);
+        }
     }
 
     removeIngredientFromShoppingList(ingredient: Ingredient): string {

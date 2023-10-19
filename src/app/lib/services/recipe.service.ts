@@ -5,7 +5,6 @@ import { bootstrapRecipes } from "../fixtures/recipes";
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
     recipeList: Recipe[] = []
-    changeActiveRecipe = new EventEmitter<Recipe>()
 
     constructor() {
         this.addRecipes(bootstrapRecipes);
@@ -31,5 +30,15 @@ export class RecipeService {
 
     getRecipes(): Recipe[] {
         return this.recipeList;
+    }
+
+    getRecipeById(id: number): Recipe {
+        return this.recipeList.filter((item) => item.id === id)[0]
+    }
+
+    generateNextId(): number {
+        let maxId = this.recipeList[0].id;
+        this.recipeList.map(item => maxId = item.id > maxId ? item.id : maxId);
+        return maxId + 1;
     }
 }
