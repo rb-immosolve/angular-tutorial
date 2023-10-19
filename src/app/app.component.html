@@ -1,10 +1,6 @@
 <app-header (tabChange)="activeTab = $event"></app-header>
 <div class="container">
-    <div class="row" *ngIf="activeTab==='recipe'">
-        <app-recipe></app-recipe>
-    </div>
-    <hr>
-    <div class="row" *ngIf="activeTab==='shopping-list'">
-        <app-shopping-list></app-shopping-list>
+    <div class="row">
+      <router-outlet></router-outlet>
     </div>
 </div>

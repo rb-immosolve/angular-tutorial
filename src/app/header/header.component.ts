@@ -6,9 +6,4 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  @Output('tabChange') tabChange = new EventEmitter<string>()
-
-  setActive(tabName:string){
-    this.tabChange.emit(tabName)
-  }
 }

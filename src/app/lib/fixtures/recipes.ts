@@ -3,6 +3,7 @@ import { Recipe } from "src/app/model/recipe.model";
 
 export const bootstrapRecipes = [
     new Recipe(
+        101,
         'Potato Soup',
         'This is simply a test',
         'https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com//content/f1/40/d07fd28b4f23954ed7ea4bcdd2af/card-overlay._TTW_._CR0,0,1080,648_.jpg',
@@ -13,6 +14,7 @@ export const bootstrapRecipes = [
             new Ingredient("Water", 1.5, "kg")
         ]),
     new Recipe(
+        102,
         'Schnitzel',
         'This is simply a test',
         'https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com//content/f1/40/d07fd28b4f23954ed7ea4bcdd2af/card-overlay._TTW_._CR0,0,1080,648_.jpg',
