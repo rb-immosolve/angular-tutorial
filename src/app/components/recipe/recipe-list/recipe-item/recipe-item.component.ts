@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
 import { RecipeService } from 'src/app/lib/services/recipe.service';
 import { Recipe } from 'src/app/model/recipe.model';
 
@@ -11,6 +10,6 @@ import { Recipe } from 'src/app/model/recipe.model';
 export class RecipeItemComponent {
   @Input() recipe: Recipe
 
-  constructor(public recipeService: RecipeService) {}
+  constructor(public recipeService: RecipeService) { }
 
 }

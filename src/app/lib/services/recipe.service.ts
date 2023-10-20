@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Recipe } from "src/app/model/recipe.model";
 import { bootstrapRecipes } from "../fixtures/recipes";
 

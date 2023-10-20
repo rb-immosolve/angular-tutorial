@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { UNITS, Unit, Ingredient } from '../../../model/ingredient.model';
-import { Logger } from 'src/app/lib/services/logging.service';
+import { ShoppingListService } from 'src/app/lib/services/shopping-list.service';
+import { IngredientService } from 'src/app/lib/services/ingredient.service';
 
 @Component({
   selector: 'app-shopping-list-edit',
@@ -8,10 +9,8 @@ import { Logger } from 'src/app/lib/services/logging.service';
   styleUrls: ['./shopping-list-edit.component.css'],
 })
 export class ShoppingListEditComponent {
-  @Output('addIngredient') addIngredientEvent = new EventEmitter<Ingredient>()
-  @Output('removeIngredient') deleteIngredientEvent = new EventEmitter<Ingredient>()
 
-  constructor(private log: Logger) { }
+  constructor(private shoppingListService: ShoppingListService, private ingredientService: IngredientService) { }
 
   units = UNITS
   name: string = ""
@@ -19,13 +18,14 @@ export class ShoppingListEditComponent {
   unit: Unit = "pcs"
 
   addIngredient() {
-    this.addIngredientEvent.emit(new Ingredient(this.name, this.amount, this.unit))
+    const errMsg: string = this.shoppingListService.addIngredientToShoppingList(new Ingredient(this.name, this.amount, this.unit))
+    this.ingredientService.emit(errMsg)
     this.clear()
-    this.log.info('New ingredient added')
   }
 
   deleteIngredient() {
-    this.deleteIngredientEvent.emit(new Ingredient(this.name, this.amount, this.unit))
+    const errMsg: string = this.shoppingListService.removeIngredientFromShoppingList(new Ingredient(this.name, this.amount, this.unit))
+    this.ingredientService.emit(errMsg)
     this.clear()
   }
 
