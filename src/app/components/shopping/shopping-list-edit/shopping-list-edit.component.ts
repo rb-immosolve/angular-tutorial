@@ -19,14 +19,14 @@ export class ShoppingListEditComponent {
 
   addIngredient() {
     const errMsg: string = this.shoppingListService.addIngredientToShoppingList(new Ingredient(this.name, this.amount, this.unit))
-    this.ingredientService.emit(errMsg)
     this.clear()
+    this.ingredientService.emit(errMsg)
   }
 
   deleteIngredient() {
     const errMsg: string = this.shoppingListService.removeIngredientFromShoppingList(new Ingredient(this.name, this.amount, this.unit))
-    this.ingredientService.emit(errMsg)
     this.clear()
+    this.ingredientService.emit(errMsg)
   }
 
   clear() {
