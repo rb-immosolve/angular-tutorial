@@ -33,5 +33,6 @@ export class ShoppingListEditComponent {
     this.name = ""
     this.amount = 0
     this.unit = "pcs"
+    this.ingredientService.emit('')
   }
 }
