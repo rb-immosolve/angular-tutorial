@@ -1,27 +1,27 @@
 <div class="row">
     <div class="col-xs-12">
-        <form>
+        <form [formGroup]="form" (ngSubmit)="upsertIngredient()">
             <div class="row">
                 <div class="col-sm-5 form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" class="form-control" [(ngModel)]="name" name="name">
+                    <input type="text" id="name" class="form-control" formControlName="name" [readonly]="editMode">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label for="amount">Amount</label>
-                    <input type="number" id="amount" class="form-control" [(ngModel)]="amount" name="amount">
+                    <input type="number" id="amount" class="form-control" formControlName="amount">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label for="unit">Unit</label>
-                    <select id="unit" class="form-control" [(ngModel)]="unit" name="unit">
+                    <select id="unit" class="form-control" formControlName="unit">
                         <option *ngFor="let unit of units" [value]="unit">{{ unit }}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <button class="btn btn-success" (click)="addIngredient()">Add</button>
-                    <button class="btn btn-danger"(click)="deleteIngredient()">Delete</button>
-                    <button class="btn btn-primary" (click)="clear()">Clear</button>
+                    <button class="btn btn-success" type="submit" [disabled]="!form.valid">{{ editMode?'Update':'Add' }}</button>
+                    <button class="btn btn-danger"  type="button" *ngIf="editMode" (click)="deleteIngredient()">Delete</button>
+                    <button class="btn btn-primary" type="button" (click)="clear()">Clear</button>
                 </div>
             </div>
         </form>

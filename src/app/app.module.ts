@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { RecipeListComponent } from './components/recipe/recipe-list/recipe-list.component';
 import { RecipeItemComponent } from './components/recipe/recipe-list/recipe-item/recipe-item.component';
@@ -31,7 +31,7 @@ import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    ReactiveFormsModule,
     AppRouteModule,
   ],
   providers: [],
