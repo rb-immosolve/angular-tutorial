@@ -1,5 +1,5 @@
 import { Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RecipeService } from 'src/app/lib/services/recipe.service';
 import { ShoppingListService } from 'src/app/lib/services/shopping-list.service';
 import { Recipe } from 'src/app/model/recipe.model';
@@ -15,13 +15,17 @@ export class RecipeDetailsComponent implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private shoppingListService: ShoppingListService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       const recipeId = parseInt(params['id'])
       this.recipe = this.recipeService.getRecipeById(recipeId)
+      if(!this.recipe){
+        this.router.navigate(['']);
+      }
     });
   }
 

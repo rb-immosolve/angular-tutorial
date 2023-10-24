@@ -60,6 +60,10 @@ export class ShoppingListEditComponent implements OnInit, OnDestroy {
   }
 
   deleteIngredient() {
+    if(!this.editMode){
+      this.ingredientService.emit('Error! Ingredient to delete not loaded correctly. Please refresh the page!');
+      return;
+    }
     const errMsg:string = this.shoppingListService.deleteIngredientFromShoppingList(this.editIndex);
     if(errMsg === ""){
       this.clear();

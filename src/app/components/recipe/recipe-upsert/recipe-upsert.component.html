@@ -1,3 +1,57 @@
 <div class="row">
-  <div class="col-xs-12">Upsert-Goes-Here</div>
+  <div class="col-xs-12">
+    <h1>
+      {{ editMode?'Edit Recipe - ' + recipe.name : 'Add New Recipe' }}
+    </h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <form action="" [formGroup]="form" (ngSubmit)="submitForm()">
+      <div class="form-group">
+        <label for="name" class="large-label">Recipe Name</label>
+        <input type="text" id="name" formControlName="name" placeholder="Recipe Name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="imageUrl" class="large-label">Recipe Image</label>
+        <input id="imageUrl" type="text" formControlName="imagePath" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="description" class="large-label">Recipe Description</label>
+        <textarea id="description" formControlName="description" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="large-label">Ingredients</label>
+        <div class="ingredient-line" *ngFor="let ingredient of ingredients;let i = index">
+          <div class="col-xs-7">
+            <div class="form-group">
+              <label [for]="'ingredientName'+i">Ingredient Name</label>
+              <input type="text" [id]="'ingredientName'+i" class="form-control" [formControl]="ingredient.get('name')"/>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label [for]="'ingredientAmount'+i">Amount</label>
+              <input type="number" [id]="'ingredientAmount'+i" class="form-control" [formControl]="ingredient.get('amount')"/>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label [for]="'ingredientUnit'+i">Unit</label>
+              <select [name]="'ingredientUnit'+i" [id]="'ingredientUnit'+i" class="form-control" [formControl]="ingredient.get('unit')">
+                <option *ngFor="let unit of units" [value]="unit">{{unit}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-1">
+            <label [for]="'button'+i">&nbsp;</label>
+            <button [id]="'button'+i" class="btn btn-danger" type="button" (click)="removeIngredient(i)">Remove</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-default" type="button" (click)="addAnotherIngredient()">Add Ingredient</button>
+      <hr/>
+      <button class="btn btn-success" type="submit"> {{editMode?'Update':'Add'}} Recipe</button>
+    </form>
+  </div>
 </div>

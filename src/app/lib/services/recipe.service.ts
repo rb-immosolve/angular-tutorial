@@ -18,6 +18,11 @@ export class RecipeService {
         recipes.map((item) => this.addRecipe(item));
     }
 
+    updateRecipeById(recipe:Recipe){
+      const index:number = this.getRecipeIndex(recipe);
+      this.recipeList[index] = recipe;
+    }
+
     removeRecipeByName(recipeName: string): void {
         this.recipeList = this.recipeList.filter((item) => item.name.toLowerCase() !== recipeName.toLowerCase());
     }
@@ -34,6 +39,14 @@ export class RecipeService {
 
     getRecipeById(id: number): Recipe {
         return this.recipeList.filter((item) => item.id === id)[0]
+    }
+
+    getRecipeIndex(recipe:Recipe){
+      for(let i = 0; i < this.recipeList.length; i++){
+        if(this.recipeList[i].id === recipe.id)
+        return i;
+      }
+      return -1;
     }
 
     generateNextId(): number {

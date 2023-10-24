@@ -12,4 +12,11 @@ export class RecipeItemComponent {
 
   constructor(public recipeService: RecipeService) { }
 
+  format(s:string){
+    if(s.length > 40){
+      s = s.substring(0,40)+"..."
+    }
+    return s;
+  }
+
 }
