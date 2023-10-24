@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-12">
+          <h1>Reactive Form Assignment 7</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <form [formGroup]="form" (ngSubmit)="formSubmit()">
+            <div class="form-group">
+              <label for="projectName">Project Name</label>
+              <input type="text" id="projectName" formControlName="name" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="email">E-Mail ID</label>
+              <input type="text" id="email" formControlName="email" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="status">Project Status</label>
+              <select name="status" id="status" formControlName="status" class="form-control">
+                <option *ngFor="let status of projectStatuses" value="status">{{status}}</option>
+              </select>
+            </div>
+            <div class="row" *ngIf="formPending">
+              <div class="col-xs-12"><span>Please wait, validating form!</span></div>
+            </div>
+            <button class="btn btn-success" type="submit" [disabled]="!form.valid">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
