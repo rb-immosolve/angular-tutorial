@@ -23,7 +23,7 @@ export class RecipeDetailsComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       const recipeId = parseInt(params['id'])
       this.recipe = this.recipeService.getRecipeById(recipeId)
-      if(!this.recipe){
+      if (!this.recipe) {
         this.router.navigate(['']);
       }
     });
@@ -31,5 +31,10 @@ export class RecipeDetailsComponent implements OnInit {
 
   addRecipeToShoppingList() {
     this.shoppingListService.addRecipeToShoppingList(this.recipe);
+  }
+
+  deleteRecipe() {
+    this.recipeService.removeRecipeByRecipe(this.recipe);
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
