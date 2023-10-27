@@ -14,6 +14,7 @@ import { DropdownDirective } from './lib/directives/dropdown-directive';
 import { AppRouteModule } from './lib/modules/routes.module';
 import { RecipeHomeComponent } from './components/recipe/recipe-home/recipe-home.component';
 import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-upsert.component';
+import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-
     DropdownDirective,
     RecipeHomeComponent,
     RecipeUpsertComponent,
+    MaxStringLengthPipe,
   ],
   imports: [
     BrowserModule,

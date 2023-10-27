@@ -93,9 +93,7 @@ export class RecipeUpsertComponent implements OnInit {
   }
 
   clearForm() {
-    while ((this.form.get('ingredients') as FormArray).controls.length > 0) {
-      (this.form.get('ingredients') as FormArray).removeAt(0);
-    }
+    (this.form.get('ingredients') as FormArray).clear();
     this.form.reset({});
   }
 

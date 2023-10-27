@@ -14,7 +14,10 @@
       </div>
       <div class="form-group">
         <label for="imageUrl" class="large-label">Recipe Image</label>
-        <input id="imageUrl" type="text" formControlName="imagePath" class="form-control">
+        <input id="imageUrl" type="text" formControlName="imagePath" class="form-control" #imagePath>
+      </div>
+      <div class="img-preview">
+        <img [src]="imagePath.value" />
       </div>
       <div class="form-group">
         <label for="description" class="large-label">Recipe Description</label>
