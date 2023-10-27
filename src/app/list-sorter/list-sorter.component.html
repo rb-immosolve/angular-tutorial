@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <ul>
+                <li *ngFor="let word of wordList | reverse | sorter"> {{ word }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <ul>
+                <li *ngFor="let word of wordList | reverse | sorter:'desc'"> {{ word }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
