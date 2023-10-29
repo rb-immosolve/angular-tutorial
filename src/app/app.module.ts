@@ -15,6 +15,7 @@ import { AppRouteModule } from './lib/modules/routes.module';
 import { RecipeHomeComponent } from './components/recipe/recipe-home/recipe-home.component';
 import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-upsert.component';
 import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
     BrowserModule,
     ReactiveFormsModule,
     AppRouteModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

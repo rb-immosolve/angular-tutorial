@@ -1,22 +1,24 @@
 import { Injectable } from "@angular/core";
 import { Recipe } from "src/app/model/recipe.model";
-import { bootstrapRecipes } from "../fixtures/recipes";
 import { Subject } from "rxjs";
+import { RecipeFirebaseConnector } from "./recipe-firebase.service";
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
-    recipeList: Recipe[] = []
+    recipeList: Recipe[] = [];
+    firstFetchComplete: boolean = false;
     recipeListModification: Subject<Recipe[]> = new Subject<Recipe[]>();
 
-    constructor() {
-        this.addRecipes(bootstrapRecipes);
-        this.recipeListModification.next(this.recipeList);
-
+    constructor(private recipeFirebaseConnector: RecipeFirebaseConnector) {
+        this.getRecipesFromConnector();
     }
 
-    addRecipe(recipe: Recipe): void {
+    async addRecipe(recipe: Recipe): Promise<string> {
+        const recipeId: string = await this.recipeFirebaseConnector.postRecipe(recipe);
+        recipe.id = recipeId;
         this.recipeList.push(recipe);
         this.recipeListModification.next(this.recipeList);
+        return recipeId;
     }
 
     addRecipes(recipes: Recipe[]): void {
@@ -24,9 +26,13 @@ export class RecipeService {
     }
 
     updateRecipeById(recipe: Recipe) {
-        const index: number = this.getRecipeIndex(recipe);
-        this.recipeList[index] = recipe;
-        this.recipeListModification.next(this.recipeList);
+        this.recipeFirebaseConnector.putRecipe(recipe).then(
+            () => {
+                const index: number = this.getRecipeIndex(recipe);
+                this.recipeList[index] = recipe;
+                this.recipeListModification.next(this.recipeList);
+            }
+        );
     }
 
     removeRecipeByName(recipeName: string): void {
@@ -35,17 +41,19 @@ export class RecipeService {
     }
 
     removeRecipeByRecipe(recipe: Recipe): void {
-        this.recipeList = this.recipeList.filter(
-            (item) => !(item.name === recipe.name && item.description === recipe.description && item.imagePath === recipe.imagePath)
-        );
-        this.recipeListModification.next(this.recipeList);
+        this.recipeFirebaseConnector.deleteRecipe(recipe).then(() => {
+            this.recipeList = this.recipeList.filter(
+                (item) => !(item.name === recipe.name && item.description === recipe.description && item.imagePath === recipe.imagePath)
+            );
+            this.recipeListModification.next(this.recipeList);
+        })
     }
 
     getRecipes(): Recipe[] {
         return this.recipeList;
     }
 
-    getRecipeById(id: number): Recipe {
+    getRecipeById(id: string): Recipe {
         return this.recipeList.filter((item) => item.id === id)[0]
     }
 
@@ -57,9 +65,11 @@ export class RecipeService {
         return -1;
     }
 
-    generateNextId(): number {
-        let maxId = this.recipeList[0].id;
-        this.recipeList.map(item => maxId = item.id > maxId ? item.id : maxId);
-        return maxId + 1;
+    async getRecipesFromConnector() {
+        this.recipeFirebaseConnector.getAllRecipes().subscribe(value => {
+            this.recipeList = value;
+            this.recipeListModification.next(this.recipeList);
+            this.firstFetchComplete = true;
+        });
     }
 }

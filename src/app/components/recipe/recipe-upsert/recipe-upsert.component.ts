@@ -27,11 +27,11 @@ export class RecipeUpsertComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       let id = params['id'];
       if (id === undefined) {
-        id = this.recipeService.generateNextId();
+        id = '';
         this.recipe = new Recipe(id, '', '', '', []);
         this.editMode = false;
       } else {
-        this.recipe = this.recipeService.getRecipeById(+id);
+        this.recipe = this.recipeService.getRecipeById(id);
         this.editMode = true;
       }
     });
@@ -66,8 +66,8 @@ export class RecipeUpsertComponent implements OnInit {
       this.recipeService.updateRecipeById(formRecipe);
       this.router.navigate(['../'], { relativeTo: this.route });
     } else {
-      this.recipeService.addRecipe(formRecipe);
-      this.router.navigate(['../', formRecipe.id], { relativeTo: this.route });
+      this.recipeService.addRecipe(formRecipe).then(value => this.router.navigate(['../', value], { relativeTo: this.route })
+      );
     }
   }
 
