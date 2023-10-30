@@ -12,7 +12,6 @@ import { Recipe } from 'src/app/model/recipe.model';
 })
 export class RecipeDetailsComponent implements OnInit, OnDestroy {
   recipe: Recipe;
-  initRecipeId: string;
   updateSubscription: Subscription
 
   constructor(
@@ -23,15 +22,16 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.initRecipeId = this.route.snapshot.params['id'];
-    if (this.recipeService.firstFetchComplete == false) {
+    let initRecipeId = this.route.snapshot.params['id'];
+    if (this.recipeService.firstFetchComplete === false) {
       this.updateSubscription = this.recipeService.recipeListModification.subscribe(() => {
-        this.recipe = this.recipeService.getRecipeById(this.initRecipeId);
-      })
-    } else {
-      this.recipe = this.recipeService.recipeList[0];
+        this.recipe = this.recipeService.getRecipeById(initRecipeId);
+        if (this.recipe === undefined) {
+          this.router.navigate(['../'], { relativeTo: this.route });
+        }
+      });
     }
-    this.route.params.subscribe(async (params: Params) => {
+    this.route.params.subscribe((params: Params) => {
       const recipeId = params['id'];
       this.recipe = this.recipeService.getRecipeById(recipeId);
     });

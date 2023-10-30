@@ -42,17 +42,19 @@ export class RecipeFirebaseConnector {
                     []
                 );
                 let ingredients: Ingredient[] = []
-                for (let ingredient of data[dbKey].ingredients) {
-                    ingredients.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unit));
+                if (data[dbKey].ingredients) {
+                    for (let ingredient of data[dbKey].ingredients) {
+                        ingredients.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unit));
+                    }
+                    newRecipe.ingredients = ingredients;
                 }
-                newRecipe.ingredients = ingredients;
                 recipes.push(newRecipe);
             }
             return recipes;
         }));
     }
 
-    async postRecipe(recipe: Recipe): Promise<string> {
+    postRecipe(recipe: Recipe): Observable<string> {
         const url: string = this.getFullAddress('');
         let id: string = "";
         const recipeData: PostRecipeFirebase = {
@@ -61,12 +63,11 @@ export class RecipeFirebaseConnector {
             imagePath: recipe.imagePath,
             ingredients: recipe.ingredients
         }
-        this.httpClient.post<{ "name": string }>(url, recipeData).subscribe({
-            next: (data) => {
-                id = data['name'];
-            }
-        });
-        return id;
+        return this.httpClient.post<{ "name": string }>(url, recipeData).pipe(map((data) => {
+            return data['name'];
+        }
+        ));
+
     }
 
     async putRecipe(recipe: Recipe) {

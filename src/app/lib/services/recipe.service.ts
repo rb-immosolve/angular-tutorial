@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Recipe } from "src/app/model/recipe.model";
-import { Subject } from "rxjs";
+import { Observable, Subject, tap } from "rxjs";
 import { RecipeFirebaseConnector } from "./recipe-firebase.service";
 
 @Injectable({ providedIn: 'root' })
@@ -13,12 +13,14 @@ export class RecipeService {
         this.getRecipesFromConnector();
     }
 
-    async addRecipe(recipe: Recipe): Promise<string> {
-        const recipeId: string = await this.recipeFirebaseConnector.postRecipe(recipe);
-        recipe.id = recipeId;
-        this.recipeList.push(recipe);
-        this.recipeListModification.next(this.recipeList);
-        return recipeId;
+    addRecipe(recipe: Recipe): Observable<string> {
+        let recipeId: string = '';
+        return this.recipeFirebaseConnector.postRecipe(recipe).pipe(tap(id => {
+            recipe.id = id;
+            this.recipeList.push(recipe);
+            this.recipeListModification.next(this.recipeList);
+            recipeId = id;
+        }));
     }
 
     addRecipes(recipes: Recipe[]): void {

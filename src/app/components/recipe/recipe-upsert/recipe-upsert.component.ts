@@ -66,8 +66,7 @@ export class RecipeUpsertComponent implements OnInit {
       this.recipeService.updateRecipeById(formRecipe);
       this.router.navigate(['../'], { relativeTo: this.route });
     } else {
-      this.recipeService.addRecipe(formRecipe).then(value => this.router.navigate(['../', value], { relativeTo: this.route })
-      );
+      this.recipeService.addRecipe(formRecipe).subscribe(id => this.router.navigate(['../', id], { relativeTo: this.route }));
     }
   }
 
