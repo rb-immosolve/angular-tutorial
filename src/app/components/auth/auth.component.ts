@@ -10,6 +10,7 @@ import { LoaderService } from 'src/app/lib/services/loader.service';
 })
 export class AuthComponent implements OnInit {
   form: FormGroup;
+  errorMsg: string = '';
 
   constructor(
     private authFirebaseConnector: AuthFirebaseConnector,
@@ -24,10 +25,17 @@ export class AuthComponent implements OnInit {
   }
 
   submit() {
+    this.errorMsg = '';
     this.form.reset();
   }
 
   register() {
+    this.errorMsg = '';
+    if (!this.form.valid) {
+      console.log(this.form);
+      this.errorMsg = 'Attempt to register with invalid form. Please fill valid data.';
+      return;
+    }
     this.authFirebaseConnector.register(this.form.value.email, this.form.value.password)
       .subscribe({
         next: (data: SignupResponse) => {
@@ -35,7 +43,7 @@ export class AuthComponent implements OnInit {
           this.loaderService.loaderChange.next(false);
         },
         error: (errorMsg: Error) => {
-          console.log(errorMsg.message);
+          this.errorMsg = errorMsg.message;
           this.loaderService.loaderChange.next(false);
         }
       });
