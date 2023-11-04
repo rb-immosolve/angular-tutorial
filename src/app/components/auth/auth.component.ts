@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthFirebaseConnector, SignupResponse } from 'src/app/lib/services/auth-firebase.service';
+import { LoaderService } from 'src/app/lib/services/loader.service';
 
 @Component({
   selector: 'app-auth',
@@ -8,14 +9,17 @@ import { AuthFirebaseConnector, SignupResponse } from 'src/app/lib/services/auth
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-  form:FormGroup;
+  form: FormGroup;
 
-  constructor(private authFirebaseConnector : AuthFirebaseConnector) {}
+  constructor(
+    private authFirebaseConnector: AuthFirebaseConnector,
+    private loaderService: LoaderService
+  ) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      email : new FormControl(null, [Validators.required, Validators.email]),
-      password : new FormControl(null, [Validators.required, Validators.minLength(6)]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
   }
 
@@ -23,11 +27,18 @@ export class AuthComponent implements OnInit {
     this.form.reset();
   }
 
-  register(){
+  register() {
     this.authFirebaseConnector.register(this.form.value.email, this.form.value.password)
-      .subscribe({next: (data:SignupResponse) => {
-        
-      }});
+      .subscribe({
+        next: (data: SignupResponse) => {
+          console.log(data);
+          this.loaderService.loaderChange.next(false);
+        },
+        error: (errorMsg: Error) => {
+          console.log(errorMsg.message);
+          this.loaderService.loaderChange.next(false);
+        }
+      });
     this.form.reset();
   }
 

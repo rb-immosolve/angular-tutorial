@@ -18,6 +18,7 @@ import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './components/auth/auth.component';
 import { recipeResolverFn } from './lib/services/recipe-resolver.service';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { recipeResolverFn } from './lib/services/recipe-resolver.service';
     RecipeUpsertComponent,
     MaxStringLengthPipe,
     AuthComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
