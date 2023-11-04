@@ -16,6 +16,8 @@ import { RecipeHomeComponent } from './components/recipe/recipe-home/recipe-home
 import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-upsert.component';
 import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthComponent } from './components/auth/auth.component';
+import { recipeResolverFn } from './lib/services/recipe-resolver.service';
 
 @NgModule({
   declarations: [
@@ -31,14 +33,18 @@ import { HttpClientModule } from '@angular/common/http';
     RecipeHomeComponent,
     RecipeUpsertComponent,
     MaxStringLengthPipe,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     AppRouteModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [{
+    provide: 'recipeResolverFn', 
+    useFactory: () => { return recipeResolverFn }
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

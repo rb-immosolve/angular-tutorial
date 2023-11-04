@@ -10,7 +10,6 @@ export class RecipeService {
     recipeListModification: Subject<Recipe[]> = new Subject<Recipe[]>();
 
     constructor(private recipeFirebaseConnector: RecipeFirebaseConnector) {
-        this.getRecipesFromConnector();
     }
 
     addRecipe(recipe: Recipe): Observable<string> {
@@ -65,13 +64,5 @@ export class RecipeService {
                 return i;
         }
         return -1;
-    }
-
-    async getRecipesFromConnector() {
-        this.recipeFirebaseConnector.getAllRecipes().subscribe(value => {
-            this.recipeList = value;
-            this.recipeListModification.next(this.recipeList);
-            this.firstFetchComplete = true;
-        });
     }
 }
