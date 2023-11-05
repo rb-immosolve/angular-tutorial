@@ -17,7 +17,7 @@ import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-
 import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './components/auth/auth.component';
-import { authGuard, recipeResolverFn, userAutologinFn } from './lib/services/auto-resolvers.service';
+import { authGuard, recipeResolver, userAutologin } from './lib/services/resolvers-guards.service';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HttpInterceptorService } from './lib/services/http-interceptor.service';
 
@@ -47,7 +47,7 @@ import { HttpInterceptorService } from './lib/services/http-interceptor.service'
   providers: [
     {
       provide: 'recipeResolverFn',
-      useFactory: () => { return recipeResolverFn }
+      useFactory: () => { return recipeResolver }
     },
     {
       provide: HTTP_INTERCEPTORS,
@@ -56,7 +56,7 @@ import { HttpInterceptorService } from './lib/services/http-interceptor.service'
     },
     {
       provide: 'userAutologinFn',
-      useValue: userAutologinFn
+      useValue: userAutologin
     },
     {
       provide: 'authGuard',

@@ -1,12 +1,12 @@
-import { Injectable, inject } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivateChildFn, CanActivateFn, ResolveFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivateFn, ResolveFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { RecipeFirebaseConnector } from "./recipe-firebase.service";
 import { Observable, map, tap } from "rxjs";
 import { Recipe } from "src/app/model/recipe.model";
 import { RecipeService } from "./recipe.service";
 import { AuthService } from "./auth.service";
 
-export const recipeResolverFn: ResolveFn<Recipe[]> =
+export const recipeResolver: ResolveFn<Recipe[]> =
   (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
@@ -18,7 +18,7 @@ export const recipeResolverFn: ResolveFn<Recipe[]> =
     }));
   };
 
-export const userAutologinFn: ResolveFn<boolean> =
+export const userAutologin: ResolveFn<boolean> =
   (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
