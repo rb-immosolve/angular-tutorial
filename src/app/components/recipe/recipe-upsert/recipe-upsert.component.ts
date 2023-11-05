@@ -45,8 +45,6 @@ export class RecipeUpsertComponent implements OnInit {
     for (let i of this.recipe.ingredients) {
       (this.form.get('ingredients') as FormArray).push(this.createIngredient(i))
     }
-
-    console.log(this.form);
   }
 
   submitForm() {

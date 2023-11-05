@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthFirebaseConnector, SignupResponse } from 'src/app/lib/services/auth-firebase.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthFirebaseConnector, AuthResponse } from 'src/app/lib/services/auth-firebase.service';
 import { LoaderService } from 'src/app/lib/services/loader.service';
 
 @Component({
@@ -14,7 +16,8 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private authFirebaseConnector: AuthFirebaseConnector,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -24,30 +27,37 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  submit() {
+  submit(register?: boolean) {
     this.errorMsg = '';
-    this.form.reset();
+    if (!this.form.valid) {
+      this.errorMsg = 'Error: Invalid form. Please fill valid data.';
+      return;
+    }
+
+    let authResponse: Observable<AuthResponse>;
+    if (register) {
+      authResponse = this.authFirebaseConnector.register(this.form.value.email, this.form.value.password);
+    }
+    else {
+      authResponse = this.authFirebaseConnector.login(this.form.value.email, this.form.value.password);
+    }
+
+    authResponse.subscribe({
+      next: (data: AuthResponse) => {
+        this.loaderService.loaderChange.next(false);
+        this.router.navigate(['/recipe']);
+        this.form.reset();
+
+      },
+      error: (errorMsg: Error) => {
+        this.errorMsg = errorMsg.message;
+        this.loaderService.loaderChange.next(false);
+      }
+    });
   }
 
   register() {
-    this.errorMsg = '';
-    if (!this.form.valid) {
-      console.log(this.form);
-      this.errorMsg = 'Attempt to register with invalid form. Please fill valid data.';
-      return;
-    }
-    this.authFirebaseConnector.register(this.form.value.email, this.form.value.password)
-      .subscribe({
-        next: (data: SignupResponse) => {
-          console.log(data);
-          this.loaderService.loaderChange.next(false);
-        },
-        error: (errorMsg: Error) => {
-          this.errorMsg = errorMsg.message;
-          this.loaderService.loaderChange.next(false);
-        }
-      });
-    this.form.reset();
+    this.submit(true);
   }
 
 }

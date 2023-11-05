@@ -5,10 +5,14 @@
     </div>
     <div class="navbar-default">
       <ul class="nav navbar-nav">
-        <li routerLinkActive="active"><a [routerLink]="['recipe']">Recipes</a></li>
+        <li routerLinkActive="active"><a [routerLink]="['recipe']" *ngIf="loggedInUser">Recipes</a></li>
         <li routerLinkActive="active"><a [routerLink]="['shopping-list']">Shopping List</a></li>
-        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><a
-            [routerLink]="['/']">Login/Register</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="!loggedInUser">
+          <a [routerLink]="['/']">Login/Register</a>
+        </li>
+        <li *ngIf="loggedInUser"><a>Logout</a></li>
       </ul>
     </div>
   </div>
