@@ -76,7 +76,8 @@ export class AuthService {
       response.email,
       response.localId,
       response.idToken,
-      expiry
+      expiry,
+      response.refreshToken
     );
     this.userSubject.next(loggedInUser);
   }
