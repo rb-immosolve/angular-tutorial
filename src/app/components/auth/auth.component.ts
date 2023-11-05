@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthFirebaseConnector, AuthResponse } from 'src/app/lib/services/auth-firebase.service';
+import { AuthService, AuthResponse } from 'src/app/lib/services/auth.service';
 import { LoaderService } from 'src/app/lib/services/loader.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class AuthComponent implements OnInit {
   errorMsg: string = '';
 
   constructor(
-    private authFirebaseConnector: AuthFirebaseConnector,
+    private authService: AuthService,
     private loaderService: LoaderService,
     private router: Router
   ) { }
@@ -36,10 +36,10 @@ export class AuthComponent implements OnInit {
 
     let authResponse: Observable<AuthResponse>;
     if (register) {
-      authResponse = this.authFirebaseConnector.register(this.form.value.email, this.form.value.password);
+      authResponse = this.authService.register(this.form.value.email, this.form.value.password);
     }
     else {
-      authResponse = this.authFirebaseConnector.login(this.form.value.email, this.form.value.password);
+      authResponse = this.authService.login(this.form.value.email, this.form.value.password);
     }
 
     authResponse.subscribe({

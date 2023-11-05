@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { AuthFirebaseConnector } from 'src/app/lib/services/auth-firebase.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/lib/services/auth.service';
 import { User } from 'src/app/model/user.model';
 
 @Component({
@@ -7,12 +8,19 @@ import { User } from 'src/app/model/user.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   loggedInUser: User;
-  constructor(private authFirebaseConnector: AuthFirebaseConnector) {
-    this.authFirebaseConnector.user.subscribe(user => {
+  authServiceSubscription: Subscription;
+
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.authServiceSubscription = this.authService.userSubject.subscribe(user => {
       this.loggedInUser = user;
-      console.log(this.loggedInUser);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.authServiceSubscription.unsubscribe();
   }
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject, catchError, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, Subject, catchError, tap, throwError } from "rxjs";
 import { LoaderService } from "./loader.service";
 import { User } from "src/app/model/user.model";
 
@@ -17,17 +17,17 @@ export interface AuthResponse {
 
 
 @Injectable({ providedIn: "root" })
-export class AuthFirebaseConnector {
+export class AuthService {
   private signUpUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
   private signInUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
   private api_key: string = "AIzaSyDLYudjDGVy9RaS6mnmnbatvA9Z1K0P9CI";
 
-  user: Subject<User> = new Subject<User>();
+  userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   constructor(private httpClient: HttpClient, private loaderService: LoaderService) { }
 
   register(email: string, password: string): Observable<AuthResponse> {
-    const headers = {
+    const options = {
       params: {
         'key': this.api_key,
       },
@@ -39,12 +39,12 @@ export class AuthFirebaseConnector {
       returnSecureToken: true,
     }
     this.loaderService.loaderChange.next(true);
-    return this.httpClient.post<AuthResponse>(this.signUpUrl, requestBody, headers)
-      .pipe(catchError(this.handleAuthError), tap(this.handleAuthenticatedUser));
+    return this.httpClient.post<AuthResponse>(this.signUpUrl, requestBody, options)
+      .pipe(catchError(this.handleAuthError), tap(data => { this.handleAuthenticatedUser(data) }));
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
-    const headers = {
+    const options = {
       params: {
         'key': this.api_key,
       },
@@ -56,8 +56,8 @@ export class AuthFirebaseConnector {
     }
     this.loaderService.loaderChange.next(true);
 
-    return this.httpClient.post<AuthResponse>(this.signInUrl, requestBody, headers)
-      .pipe(catchError(this.handleAuthError), tap(this.handleAuthenticatedUser));
+    return this.httpClient.post<AuthResponse>(this.signInUrl, requestBody, options)
+      .pipe(catchError(this.handleAuthError), tap(data => { this.handleAuthenticatedUser(data) }));
   }
 
   private handleAuthenticatedUser(response: AuthResponse) {
@@ -68,7 +68,7 @@ export class AuthFirebaseConnector {
       response.idToken,
       expiry
     );
-    this.user.next(loggedInUser);
+    this.userSubject.next(loggedInUser);
   }
 
   private handleAuthError(error: HttpErrorResponse) {

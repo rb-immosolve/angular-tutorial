@@ -4,6 +4,8 @@ import { Observable, map } from "rxjs";
 import { Ingredient } from "src/app/model/ingredient.model";
 import { Recipe, GetRecipeFirebase, PostRecipeFirebase, PutRecipeFirebase } from "src/app/model/recipe.model";
 
+export interface FirebaseRecipes { [s: string]: GetRecipeFirebase };
+
 @Injectable({ providedIn: 'root' })
 export class RecipeFirebaseConnector {
     private connectionAddress: string = "https://angular-tutorial-recipe-d938c-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -11,7 +13,9 @@ export class RecipeFirebaseConnector {
     private tableName: string = "recipes";
     private extension: string = ".json";
 
-    constructor(private httpClient: HttpClient) { }
+
+    constructor(private httpClient: HttpClient) {
+    }
 
     getFullAddress(dbObjectPath: string, absolute: boolean = false): string {
         if (absolute === true) {
@@ -32,7 +36,7 @@ export class RecipeFirebaseConnector {
     getAllRecipes(): Observable<Recipe[]> {
         const url: string = this.getFullAddress('');
         const recipes: Recipe[] = [];
-        return this.httpClient.get<{ [s: string]: GetRecipeFirebase }>(url).pipe(map((data) => {
+        return this.httpClient.get<FirebaseRecipes>(url).pipe(map((data) => {
             for (let dbKey in data) {
                 let newRecipe: Recipe = new Recipe(
                     dbKey,
@@ -63,11 +67,10 @@ export class RecipeFirebaseConnector {
             imagePath: recipe.imagePath,
             ingredients: recipe.ingredients
         }
+
         return this.httpClient.post<{ "name": string }>(url, recipeData).pipe(map((data) => {
             return data['name'];
-        }
-        ));
-
+        }));
     }
 
     async putRecipe(recipe: Recipe) {
