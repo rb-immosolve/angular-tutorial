@@ -12,7 +12,7 @@
         <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="!loggedInUser">
           <a [routerLink]="['/']">Login/Register</a>
         </li>
-        <li *ngIf="loggedInUser"><a style="cursor:pointer;">Logout</a></li>
+        <li *ngIf="loggedInUser"><a style="cursor:pointer;" (click)="logout()">Logout</a></li>
       </ul>
     </div>
   </div>

@@ -15,10 +15,11 @@ import { AppRouteModule } from './lib/modules/routes.module';
 import { RecipeHomeComponent } from './components/recipe/recipe-home/recipe-home.component';
 import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-upsert.component';
 import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './components/auth/auth.component';
 import { recipeResolverFn } from './lib/services/recipe-resolver.service';
 import { LoaderComponent } from './components/loader/loader.component';
+import { HttpInterceptorService } from './lib/services/http-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -43,10 +44,17 @@ import { LoaderComponent } from './components/loader/loader.component';
     AppRouteModule,
     HttpClientModule,
   ],
-  providers: [{
-    provide: 'recipeResolverFn', 
-    useFactory: () => { return recipeResolverFn }
-  }],
+  providers: [
+    {
+      provide: 'recipeResolverFn',
+      useFactory: () => { return recipeResolverFn }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

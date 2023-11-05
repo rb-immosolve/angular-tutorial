@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, catchError, tap, throwError } from "rxjs";
 import { LoaderService } from "./loader.service";
 import { User } from "src/app/model/user.model";
+import { Router } from "@angular/router";
 
 export interface AuthResponse {
   kind: string;
@@ -24,7 +25,11 @@ export class AuthService {
 
   userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
-  constructor(private httpClient: HttpClient, private loaderService: LoaderService) { }
+  constructor(
+    private httpClient: HttpClient,
+    private loaderService: LoaderService,
+    private router: Router
+  ) { }
 
   register(email: string, password: string): Observable<AuthResponse> {
     const options = {
@@ -58,6 +63,11 @@ export class AuthService {
 
     return this.httpClient.post<AuthResponse>(this.signInUrl, requestBody, options)
       .pipe(catchError(this.handleAuthError), tap(data => { this.handleAuthenticatedUser(data) }));
+  }
+
+  logout() {
+    this.userSubject.next(null);
+    this.router.navigate(['/']);
   }
 
   private handleAuthenticatedUser(response: AuthResponse) {
