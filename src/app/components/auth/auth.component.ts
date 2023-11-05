@@ -27,7 +27,7 @@ export class AuthComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
-    this.authService.userSubject.subscribe(user => { this.loggedInUser = user });
+    this.authService.userSubject.subscribe(user => { if (!!user) this.router.navigate(['/recipe']); });
   }
 
   submit(register?: boolean) {

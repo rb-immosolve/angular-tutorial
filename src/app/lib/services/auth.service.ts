@@ -69,6 +69,7 @@ export class AuthService {
     this.userSubject.next(null);
     this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
+    // clear any attempts to relogin after token would have naturally expired
   }
 
   autoLogin() {
@@ -84,7 +85,11 @@ export class AuthService {
     );
     if (userObject.token) {
       this.userSubject.next(userObject);
-    } // else will attempt with refreshToken
+    } else {
+      // relogin with refreshToken
+    }
+    // setTimeout relogin with refreshToken after token expiration
+
   }
 
   private handleAuthenticatedUser(response: AuthResponse) {
@@ -97,6 +102,7 @@ export class AuthService {
       response.refreshToken
     );
     this.userSubject.next(loggedInUser);
+    // setTimeout relogin with refreshToken after token expiration
     localStorage.setItem('userData', JSON.stringify(loggedInUser));
   }
 

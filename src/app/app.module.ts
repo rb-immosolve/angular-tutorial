@@ -17,10 +17,9 @@ import { RecipeUpsertComponent } from './components/recipe/recipe-upsert/recipe-
 import { MaxStringLengthPipe } from './lib/pipes/max-string-length.pipe';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './components/auth/auth.component';
-import { recipeResolverFn, userAutologinFn } from './lib/services/auto-resolvers.service';
+import { authGuard, recipeResolverFn, userAutologinFn } from './lib/services/auto-resolvers.service';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HttpInterceptorService } from './lib/services/http-interceptor.service';
-import { HomepageComponent } from './components/homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +37,6 @@ import { HomepageComponent } from './components/homepage/homepage.component';
     MaxStringLengthPipe,
     AuthComponent,
     LoaderComponent,
-    HomepageComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +57,10 @@ import { HomepageComponent } from './components/homepage/homepage.component';
     {
       provide: 'userAutologinFn',
       useValue: userAutologinFn
+    },
+    {
+      provide: 'authGuard',
+      useValue: authGuard
     }
   ],
   bootstrap: [AppComponent]

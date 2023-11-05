@@ -8,11 +8,5 @@ import { RecipeService } from '../../lib/services/recipe.service';
   styleUrls: ['./recipe.component.scss']
 })
 export class RecipeComponent {
-  activeRecipe: Recipe
 
-  constructor(public recipeService: RecipeService) { }
-
-  updateRecipe(recipe: Recipe) {
-    this.activeRecipe = Object.assign({}, recipe)
-  }
 }
