@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, take, tap } from 'rxjs';
 import { AuthService, AuthResponse } from 'src/app/lib/services/auth.service';
 import { LoaderService } from 'src/app/lib/services/loader.service';
+import { User } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-auth',
@@ -13,6 +14,7 @@ import { LoaderService } from 'src/app/lib/services/loader.service';
 export class AuthComponent implements OnInit {
   form: FormGroup;
   errorMsg: string = '';
+  loggedInUser: User;
 
   constructor(
     private authService: AuthService,
@@ -25,6 +27,7 @@ export class AuthComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
+    this.authService.userSubject.subscribe(user => { this.loggedInUser = user });
   }
 
   submit(register?: boolean) {

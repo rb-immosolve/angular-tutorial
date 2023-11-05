@@ -67,7 +67,24 @@ export class AuthService {
 
   logout() {
     this.userSubject.next(null);
-    this.router.navigate(['/']);
+    this.router.navigate(['/auth']);
+    localStorage.removeItem('userData');
+  }
+
+  autoLogin() {
+    const userData = localStorage.getItem('userData');
+    if (!userData) return;
+    const jsonUser = JSON.parse(userData);
+    const userObject: User = new User(
+      jsonUser.email,
+      jsonUser.id,
+      jsonUser._token,
+      new Date(jsonUser._tokenExpirationDate),
+      jsonUser._refreshToken
+    );
+    if (userObject.token) {
+      this.userSubject.next(userObject);
+    } // else will attempt with refreshToken
   }
 
   private handleAuthenticatedUser(response: AuthResponse) {
@@ -80,6 +97,7 @@ export class AuthService {
       response.refreshToken
     );
     this.userSubject.next(loggedInUser);
+    localStorage.setItem('userData', JSON.stringify(loggedInUser));
   }
 
   private handleAuthError(error: HttpErrorResponse) {
