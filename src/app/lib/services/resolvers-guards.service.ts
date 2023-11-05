@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, ResolveFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { RecipeFirebaseConnector } from "./recipe-firebase.service";
-import { Observable, map, tap } from "rxjs";
+import { Observable, map, take, tap } from "rxjs";
 import { Recipe } from "src/app/model/recipe.model";
 import { RecipeService } from "./recipe.service";
 import { AuthService } from "./auth.service";
@@ -35,7 +35,7 @@ export const authGuard: CanActivateFn =
     authService: AuthService = inject(AuthService),
     router: Router = inject(Router)
   ): Observable<boolean | UrlTree> => {
-    return authService.userSubject.pipe(map((user) => {
+    return authService.userSubject.pipe(take(1), map((user) => {
       if (!!user) return true;
       return router.createUrlTree(['/auth']);
     }));
