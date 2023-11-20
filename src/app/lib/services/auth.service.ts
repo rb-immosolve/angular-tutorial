@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject, catchError, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, Subject, catchError, map, take, tap, throwError } from "rxjs";
 import { LoaderService } from "./loader.service";
 import { User } from "src/app/model/user.model";
 import { Router } from "@angular/router";
@@ -16,14 +16,25 @@ export interface AuthResponse {
   registered?: boolean;
 }
 
+export interface RefreshResponse {
+  access_token: string;
+  expires_in: string;
+  id_token: string;
+  project_id: string;
+  refresh_token: string;
+  token_type: string;
+  user_id: string;
+}
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
   private signUpUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
   private signInUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
+  private refreshUrl: string = "https://securetoken.googleapis.com/v1/token";
   private api_key: string = "AIzaSyDLYudjDGVy9RaS6mnmnbatvA9Z1K0P9CI";
 
   userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  private autoRelogger;
 
   constructor(
     private httpClient: HttpClient,
@@ -33,9 +44,7 @@ export class AuthService {
 
   register(email: string, password: string): Observable<AuthResponse> {
     const options = {
-      params: {
-        'key': this.api_key,
-      },
+      params: new HttpParams().set('key', this.api_key),
     };
 
     const requestBody = {
@@ -44,15 +53,15 @@ export class AuthService {
       returnSecureToken: true,
     }
     this.loaderService.loaderChange.next(true);
-    return this.httpClient.post<AuthResponse>(this.signUpUrl, requestBody, options)
-      .pipe(catchError(this.handleAuthError), tap(data => { this.handleAuthenticatedUser(data) }));
+    return this.httpClient.post<AuthResponse>(this.signUpUrl, requestBody, options).pipe(
+      catchError(this.handleAuthError),
+      tap(data => { this.handleAuthenticatedUser(data) })
+    );
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
     const options = {
-      params: {
-        'key': this.api_key,
-      },
+      params: new HttpParams().set('key', this.api_key),
     };
     const requestBody = {
       email: email,
@@ -61,15 +70,20 @@ export class AuthService {
     }
     this.loaderService.loaderChange.next(true);
 
-    return this.httpClient.post<AuthResponse>(this.signInUrl, requestBody, options)
-      .pipe(catchError(this.handleAuthError), tap(data => { this.handleAuthenticatedUser(data) }));
+    return this.httpClient.post<AuthResponse>(this.signInUrl, requestBody, options).pipe(
+      catchError(this.handleAuthError),
+      tap(data => { this.handleAuthenticatedUser(data) })
+    );
   }
 
   logout() {
     this.userSubject.next(null);
     this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
-    // clear any attempts to relogin after token would have naturally expired
+    if (this.autoRelogger) {
+      clearTimeout(this.autoRelogger);
+    }
+    this.autoRelogger = null;
   }
 
   autoLogin() {
@@ -85,11 +99,25 @@ export class AuthService {
     );
     if (userObject.token) {
       this.userSubject.next(userObject);
+      this.relogAfter(userObject);
     } else {
-      // relogin with refreshToken
+      this.autoRelogin(userObject).subscribe(data => this.loaderService.loaderChange.next(false));
     }
-    // setTimeout relogin with refreshToken after token expiration
+  }
 
+  autoRelogin(userObject: User) {
+    const options = {
+      params: new HttpParams().set('key', this.api_key)
+    };
+    const body = {
+      grant_type: 'refresh_token',
+      refresh_token: userObject.refreshToken
+    };
+    this.loaderService.loaderChange.next(true);
+    return this.httpClient.post<RefreshResponse>(this.refreshUrl, body, options).pipe(
+      catchError(this.handleAuthError),
+      tap((response) => { this.handleReauthenticatedUser(userObject, response); })
+    );
   }
 
   private handleAuthenticatedUser(response: AuthResponse) {
@@ -102,8 +130,31 @@ export class AuthService {
       response.refreshToken
     );
     this.userSubject.next(loggedInUser);
-    // setTimeout relogin with refreshToken after token expiration
     localStorage.setItem('userData', JSON.stringify(loggedInUser));
+    this.relogAfter(loggedInUser);
+  }
+
+  private handleReauthenticatedUser(userObject: User, response: RefreshResponse) {
+    const expiry = new Date(new Date().getTime() + parseInt(response.expires_in) * 1000);
+    const reloggedInUser = new User(
+      userObject.email,
+      response.user_id,
+      response.id_token,
+      expiry,
+      response.refresh_token
+    );
+    this.userSubject.next(reloggedInUser);
+    localStorage.setItem('userData', JSON.stringify(reloggedInUser));
+    localStorage.setItem('lastRefreshedAt', new Date().toString());
+    this.relogAfter(reloggedInUser);
+  }
+
+  relogAfter(userObject: User) {
+    const duration: number = userObject.expiresIn;
+    this.autoRelogger = setTimeout(
+      () => { this.autoRelogin(userObject).subscribe(data => this.loaderService.loaderChange.next(false)); },
+      duration
+    );
   }
 
   private handleAuthError(error: HttpErrorResponse) {
