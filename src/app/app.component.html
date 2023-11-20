@@ -7,4 +7,5 @@
   </div>
 </div>
 
-<app-loader></app-loader>
+<app-loader *ngIf="isLoading"></app-loader>
+<app-modal-popup *ngIf="popupMessage" [message]="popupMessage"></app-modal-popup>

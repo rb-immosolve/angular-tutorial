@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, catchError, map, take, tap, throwError } from "rxjs";
-import { LoaderService } from "./loader.service";
+import { ModalService } from "./modal.service";
 import { User } from "src/app/model/user.model";
 import { Router } from "@angular/router";
 
@@ -38,7 +38,7 @@ export class AuthService {
 
   constructor(
     private httpClient: HttpClient,
-    private loaderService: LoaderService,
+    private modalService: ModalService,
     private router: Router
   ) { }
 
@@ -52,7 +52,7 @@ export class AuthService {
       password: password,
       returnSecureToken: true,
     }
-    this.loaderService.loaderChange.next(true);
+    this.modalService.isLoading(true);
     return this.httpClient.post<AuthResponse>(this.signUpUrl, requestBody, options).pipe(
       catchError(this.handleAuthError),
       tap(data => { this.handleAuthenticatedUser(data) })
@@ -68,7 +68,7 @@ export class AuthService {
       password: password,
       returnSecureToken: true,
     }
-    this.loaderService.loaderChange.next(true);
+    this.modalService.isLoading(true);
 
     return this.httpClient.post<AuthResponse>(this.signInUrl, requestBody, options).pipe(
       catchError(this.handleAuthError),
@@ -101,7 +101,7 @@ export class AuthService {
       this.userSubject.next(userObject);
       this.relogAfter(userObject);
     } else {
-      this.autoRelogin(userObject).subscribe(data => this.loaderService.loaderChange.next(false));
+      this.autoRelogin(userObject).subscribe(data => this.modalService.isLoading(false));
     }
   }
 
@@ -113,7 +113,7 @@ export class AuthService {
       grant_type: 'refresh_token',
       refresh_token: userObject.refreshToken
     };
-    this.loaderService.loaderChange.next(true);
+    this.modalService.isLoading(true);
     return this.httpClient.post<RefreshResponse>(this.refreshUrl, body, options).pipe(
       catchError(this.handleAuthError),
       tap((response) => { this.handleReauthenticatedUser(userObject, response); })
@@ -152,7 +152,7 @@ export class AuthService {
   relogAfter(userObject: User) {
     const duration: number = userObject.expiresIn;
     this.autoRelogger = setTimeout(
-      () => { this.autoRelogin(userObject).subscribe(data => this.loaderService.loaderChange.next(false)); },
+      () => { this.autoRelogin(userObject).subscribe(data => this.modalService.isLoading(false)); },
       duration
     );
   }

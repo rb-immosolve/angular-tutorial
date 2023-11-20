@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, take, tap } from 'rxjs';
 import { AuthService, AuthResponse } from 'src/app/lib/services/auth.service';
-import { LoaderService } from 'src/app/lib/services/loader.service';
+import { ModalService } from 'src/app/lib/services/modal.service';
 import { User } from 'src/app/model/user.model';
 
 @Component({
@@ -18,7 +18,7 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private loaderService: LoaderService,
+    private modalService: ModalService,
     private router: Router
   ) { }
 
@@ -47,14 +47,14 @@ export class AuthComponent implements OnInit {
 
     authResponse.subscribe({
       next: (data: AuthResponse) => {
-        this.loaderService.loaderChange.next(false);
+        this.modalService.isLoading(false);
         this.router.navigate(['/recipe']);
         this.form.reset();
 
       },
       error: (errorMsg: Error) => {
-        this.errorMsg = errorMsg.message;
-        this.loaderService.loaderChange.next(false);
+        this.modalService.isLoading(false);
+        this.modalService.showMessage(errorMsg.message);
       }
     });
   }

@@ -20,6 +20,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { authGuard, recipeResolver, userAutologin } from './lib/services/resolvers-guards.service';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HttpInterceptorService } from './lib/services/http-interceptor.service';
+import { ModalPopupComponent } from './components/modal-popup/modal-popup.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { HttpInterceptorService } from './lib/services/http-interceptor.service'
     MaxStringLengthPipe,
     AuthComponent,
     LoaderComponent,
+    ModalPopupComponent,
   ],
   imports: [
     BrowserModule,
