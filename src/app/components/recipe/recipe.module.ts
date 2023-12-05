@@ -21,14 +21,6 @@ import { RecipeRoutesModule } from "./recipe.routes.module";
         RecipeUpsertComponent,
         MaxStringLengthPipe
     ],
-    exports: [
-        RecipeListComponent,
-        RecipeItemComponent,
-        RecipeDetailsComponent,
-        RecipeComponent,
-        RecipeHomeComponent,
-        RecipeUpsertComponent,
-    ],
     imports: [
         RecipeRoutesModule,
         ReactiveFormsModule,
