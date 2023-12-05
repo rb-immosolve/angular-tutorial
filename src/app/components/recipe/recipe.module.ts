@@ -6,10 +6,9 @@ import { RecipeComponent } from "./recipe.component";
 import { RecipeHomeComponent } from "./recipe-home/recipe-home.component";
 import { RecipeUpsertComponent } from "./recipe-upsert/recipe-upsert.component";
 import { MaxStringLengthPipe } from "src/app/lib/pipes/max-string-length.pipe";
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterModule } from "@angular/router";
-import { CommonModule } from "@angular/common";
 import { RecipeRoutesModule } from "./recipe.routes.module";
+import { SharedModule } from "src/app/lib/modules/shared.module";
+import { recipeResolver } from "src/app/lib/services/resolvers-guards.service";
 
 @NgModule({
     declarations: [
@@ -23,8 +22,13 @@ import { RecipeRoutesModule } from "./recipe.routes.module";
     ],
     imports: [
         RecipeRoutesModule,
-        ReactiveFormsModule,
-        CommonModule
+        SharedModule
+    ],
+    providers: [
+        {
+            provide: 'recipeResolverFn',
+            useFactory: () => { return recipeResolver }
+        },
     ]
 })
 export class RecipesModule{}
